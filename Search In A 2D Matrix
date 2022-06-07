@@ -1,0 +1,20 @@
+#include <bits/stdc++.h> 
+#include <vector>
+
+bool findTargetInMatrix(vector < vector < int >> & matrix, int m, int n, int target) {
+    // Write your code here.
+    int row = matrix.size(), col = matrix[0].size(), s=0, e= row*col-1;
+        int mid = s+(e-s)/2;
+        while(s<=e){
+            mid = s+(e-s)/2;
+            int element = matrix[mid/col][mid%col];
+            if(element == target)
+                return true;
+            else if(target > element)
+                s = mid+1;
+            else
+                e = mid-1;
+            
+        }
+        return false;
+}
