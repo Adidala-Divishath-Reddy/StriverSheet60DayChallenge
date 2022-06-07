@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+vector<int> nextPermutation(vector<int> &permutation, int n)
+{
+    //  Write your code here.
+    vector<int> ans;
+    ans.clear();
+    if(next_permutation(permutation.begin(),permutation.end()))
+        for(auto i: permutation)
+            ans.push_back(i);
+    else{
+        sort(permutation.begin(),permutation.end());
+        for(auto i: permutation)
+            ans.push_back(i);
+    }
+    return ans;
+//     int flag =1, mini;
+//     vector<int> ans;
+//     if(n!=1){
+//         mini = n-1;
+//         int i;
+//         for(i=n-2; i>=0; i--){
+//             if(permutation[i]>permutation[i+1])
+//             {
+//                 continue;
+//             }
+//             else{
+//                 swap(permutation[i], permutation[mini]);
+//                 break;
+//             }
+//         }
+//         if(i==-1)
+//             return ans;
+//         reverse(permutation.begin()+i+1,permutation.end()-1);
+//     }
+//     return permutation;
+}
