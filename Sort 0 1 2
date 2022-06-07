@@ -1,0 +1,6 @@
+#include <bits/stdc++.h> 
+void sort012(int *nums, int n)
+{
+   //   Write your code here
+    sort(nums,nums+n);
+}
