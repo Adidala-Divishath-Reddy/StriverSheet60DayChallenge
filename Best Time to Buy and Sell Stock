@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+int maximumProfit(vector<int> &prices){
+    // Write your code here.
+    stack<pair<int,int>> s;
+        int maxi = 0;
+        for(auto i: prices){
+            if(s.empty())
+                s.push({i,0});
+            else{
+                while(!s.empty()  && s.top().first >= i)
+                    s.pop();
+                // for(auto st: s)
+                // {
+                int val=0;
+                if(!s.empty())
+                    val = i-s.top().first + s.top().second;
+    
+                maxi = max(maxi, val);
+                // }
+                s.push({i,val});
+            }
+        }
+        return maxi;
+}
