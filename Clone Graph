@@ -1,0 +1,26 @@
+graphNode* dfs(graphNode* node, unordered_map<graphNode*, graphNode*> &um){
+        graphNode* clone = new graphNode(node->data);
+//         cout<<clone->val<<" ";
+        um[node] = clone;
+        vector<graphNode*> neighbours;
+        for(auto it: node->neighbours){
+            if(um.find(it) != um.end()){
+                clone->neighbours.push_back(um[it]);
+            }
+            else
+                clone->neighbours.push_back(dfs(it,um));
+        }
+        return clone;
+    }
+graphNode *cloneGraph(graphNode *node)
+{
+    // Write your code here.
+    if(!node)
+            return NULL;
+        unordered_map<graphNode*, graphNode*> um;
+        if(node->neighbours.size() == 0)
+        {
+            return new graphNode(node->data);
+        }
+        return dfs(node, um);
+}
