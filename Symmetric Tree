@@ -1,0 +1,21 @@
+
+bool isSameTree(BinaryTreeNode<int>* p, BinaryTreeNode<int>* q){
+        if(!p && !q)
+            return true;
+        else if(!p || !q)
+            return false;
+        else{
+            if(p->data == q->data){
+                return isSameTree(p->left, q->right)&&isSameTree(p->right, q->left);
+            }
+            else
+                return false;
+        }
+    }
+bool isSymmetric(BinaryTreeNode<int>* root)
+{
+    // Write your code here.    
+    if(!root)
+            return true;
+        return isSameTree(root->left, root->right);
+}
