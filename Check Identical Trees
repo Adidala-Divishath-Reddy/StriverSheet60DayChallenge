@@ -1,0 +1,14 @@
+bool identicalTrees(BinaryTreeNode<int>* p, BinaryTreeNode<int>* q) {
+    // Write your code here. 	 
+    if(!p && !q)
+            return true;
+        else if(!p || !q)
+            return false;
+        else{
+            if(p->data == q->data){
+                return identicalTrees(p->left, q->left)&&identicalTrees(p->right, q->right);
+            }
+            else
+                return false;
+        }
+}
