@@ -1,0 +1,25 @@
+int findHeight(TreeNode<int>* root){
+        if(!root)
+            return 0;
+        return 1 + max(findHeight(root->left), findHeight(root->right));
+    }
+    void preorder(TreeNode<int>* root, vector<int>& exploredLevel,vector<int>& ans,int level){
+        if(!root)
+            return;
+        if(!exploredLevel[level]){
+            ans.push_back(root->data);
+            exploredLevel[level] = 1;
+        }
+        preorder(root->left,exploredLevel,ans,level+1);
+        preorder(root->right,exploredLevel,ans,level+1);
+        
+    }
+vector<int> getLeftView(TreeNode<int> *root)
+{
+    //    Write your code here
+        vector<int> ans;
+        int height = findHeight(root);
+        vector<int> exploredLevel(height,0);
+        preorder(root,exploredLevel,ans,0);
+        return ans;
+}
