@@ -1,0 +1,12 @@
+int kthLargest(vector<int>& nums, int size, int k)
+{
+	// Write your code here.
+    priority_queue<int> pq;
+        for(auto i: nums){
+            pq.push(i);
+        }
+        while(--k){
+            pq.pop();    
+        }
+        return pq.top();
+}
