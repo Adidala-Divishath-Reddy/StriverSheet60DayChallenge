@@ -1,0 +1,78 @@
+/************************************************************
+
+Following is the Binary Tree node class
+    
+template <typename T = int>
+class TreeNode
+{
+public:
+    T data;
+    TreeNode<T> *left;
+    TreeNode<T> *right;
+
+    TreeNode(T val)
+    {
+        this->data = val;
+        left = NULL;
+        right = NULL;
+    }
+
+    ~TreeNode()
+    {
+        if (left != NULL)
+        {
+            delete left;
+        }
+        if (right != NULL)
+        {
+            delete right;
+        }
+    }
+};
+
+************************************************************/
+#include<bits/stdc++.h>
+void find(TreeNode<int> *root,int &LengthOfLeftMost , int &LengthOfRightMost,int val){
+    if(root){
+       if(val < LengthOfLeftMost)  
+           LengthOfLeftMost = val;
+        else if(val > LengthOfRightMost)
+            LengthOfRightMost = val;
+        find(root->left, LengthOfLeftMost, LengthOfRightMost, val-1);
+        find(root->right, LengthOfLeftMost, LengthOfRightMost, val+1);
+    }
+}
+vector<int> verticalOrderTraversal(TreeNode<int> *root)
+{
+    //    Write your code here.
+    vector<int> ans;
+    if(root){
+    int LengthOfLeftMost = 0, LengthOfRightMost=0;
+    unordered_map<int,vector<int>> lastNodeInThatLevel;
+    queue<pair<TreeNode<int> *,int>> q;
+    find(root, LengthOfLeftMost,LengthOfRightMost,0);
+    TreeNode<int> * temp = root->left;
+    for(int i=LengthOfLeftMost; i<=LengthOfRightMost; i++){
+        lastNodeInThatLevel[i].push_back(-1);//Initiallly we don't know last node in any level. So put -1.
+    }
+    temp = root;
+    q.push({root,0});
+    while(!q.empty()){
+        temp = q.front().first;
+        if(lastNodeInThatLevel[q.front().second][0]==-1)
+            lastNodeInThatLevel[q.front().second][0] = temp->data;
+        else
+        lastNodeInThatLevel[q.front().second].push_back(temp->data);
+        if(temp->left)
+        q.push({temp->left,q.front().second-1});
+        if(temp->right)
+        q.push({temp->right,q.front().second+1});
+        q.pop();
+    }
+    
+    for(int i=LengthOfLeftMost; i<=LengthOfRightMost; i++)
+        for(auto element : lastNodeInThatLevel[i])
+            ans.push_back(element);
+    }
+    return ans;
+}
