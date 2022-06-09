@@ -1,0 +1,49 @@
+/*************************************************************
+
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode
+    {
+    public :
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+#include<stack>
+vector<int> zigZagTraversal(BinaryTreeNode<int> *root)
+{
+    // Write your code here!
+    stack<BinaryTreeNode<int> *> sRL,sLR; // sRL is push right node first and left node. sLR works in reverse mode
+    vector<int> ans;
+    if(root){
+        sRL.push(root);
+        while(!sRL.empty() || !sLR.empty()){
+            while(!sRL.empty()){
+                if(sRL.top()->left)
+                sLR.push(sRL.top()->left);
+                if(sRL.top()->right)
+                sLR.push(sRL.top()->right);
+                ans.push_back(sRL.top()->data);
+                sRL.pop();
+            }
+            while(!sLR.empty()){
+           
+                if(sLR.top()->right)
+                sRL.push(sLR.top()->right);
+                if(sLR.top()->left)
+                sRL.push(sLR.top()->left);
+                ans.push_back(sLR.top()->data);
+                sLR.pop();
+            }
+        }
+    }
+    return ans;
+}
