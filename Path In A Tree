@@ -1,0 +1,64 @@
+/*   
+    template <typename T = int>
+	class TreeNode
+	{
+		public:
+		T data;
+		TreeNode<T> *left;
+		TreeNode<T> *right;
+
+		TreeNode(T data)
+		{
+			this->data = data;
+			left = NULL;
+			right = NULL;
+		}
+
+		~TreeNode()
+		{
+			if (left != NULL)
+			{
+		  		delete left;
+			}
+			if (right != NULL)
+			{
+			 	delete right;
+			}
+		}
+	};
+*/
+#include<deque>
+#include<vector>
+bool find(TreeNode<int> *root,deque<int> &q, int x){
+    if(!root)
+        return false;
+    q.push_back(root->data);
+    if(root->data == x)
+        return true;
+    
+    bool left = find(root->left, q, x);
+    if(left)
+        return true;
+
+    bool right = find(root->right, q, x);
+    if(right)
+        return true;
+    
+    q.pop_back();//if x isn't present in left and right sub tree of root, then pop root from dequeue;
+    return false;
+}
+vector<int> pathInATree(TreeNode<int> *root, int x)
+{
+    // Write your code here.
+    deque<int> q;
+    vector<int> ans;
+    if(root)
+        bool foundElement = find(root, q,x);
+ 
+    while(!q.empty())
+    {
+        ans.push_back(q.front());
+        q.pop_front();
+    }
+    return ans;
+}
