@@ -1,0 +1,71 @@
+/************************************************************
+
+    Following is the TreeNode class structure:
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+#include<bits/stdc++.h>
+
+void find(TreeNode<int> *root,int &LengthOfLeftMost , int &LengthOfRightMost,int val){
+    if(root){
+       if(val < LengthOfLeftMost)  
+           LengthOfLeftMost = val;
+        else if(val > LengthOfRightMost)
+            LengthOfRightMost = val;
+        find(root->left, LengthOfLeftMost, LengthOfRightMost, val-1);
+        find(root->right, LengthOfLeftMost, LengthOfRightMost, val+1);
+    }
+}
+vector<int> getTopView(TreeNode<int> *root) {
+    // Write your code here.
+    vector<int> ans;
+    if(root){
+    int LengthOfLeftMost = 0, LengthOfRightMost=0;
+    unordered_map<int,int> lastNodeInThatLevel;
+    queue<pair<TreeNode<int> *,int>> q;
+    find(root, LengthOfLeftMost,LengthOfRightMost,0);
+    TreeNode<int> * temp = root->left;
+//     while(temp){
+//         temp = temp->left;
+//         LengthOfLeftMost++;
+//     }
+//     temp = root->right;
+//     while(temp){
+//         temp = temp->right;
+//         LengthOfRightMost++;
+//     }
+//     LengthOfLeftMost *=-1;
+    for(int i=LengthOfLeftMost; i<=LengthOfRightMost; i++){
+        lastNodeInThatLevel[i]=-1;//Initiallly we don't know last node in any level. So put -1.
+    }
+    temp = root;
+    q.push({root,0});
+    while(!q.empty()){
+        temp = q.front().first;
+        if(lastNodeInThatLevel[q.front().second] == -1)
+        lastNodeInThatLevel[q.front().second] = temp->val;
+        if(temp->left)
+        q.push({temp->left,q.front().second-1});
+        if(temp->right)
+        q.push({temp->right,q.front().second+1});
+        q.pop();
+    }
+    
+    for(int i=LengthOfLeftMost; i<=LengthOfRightMost; i++)
+        ans.push_back(lastNodeInThatLevel[i]);
+    }
+    return ans;
+}
