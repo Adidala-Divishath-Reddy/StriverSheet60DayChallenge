@@ -1,0 +1,38 @@
+/*************************************************************
+ 
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode 
+    {
+    public : 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+#include<math.h>
+pair<bool,int> find(BinaryTreeNode<int>* root){
+    if(!root)
+        return {true,0};
+    pair<bool,int> left = find(root->left);
+    pair<bool,int> right = find(root->right);
+    if(left.first&&right.first && abs(left.second-right.second)<=1)
+        return {true, 1+max(left.second,right.second)};
+        
+    return {false, 1+max(left.second,right.second)};
+    
+}
+bool isBalancedBT(BinaryTreeNode<int>* root) {
+    // Write your code here.
+    if(root){
+        return find(root).first;
+    }
+    return true;
+}
