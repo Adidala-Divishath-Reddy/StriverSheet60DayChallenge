@@ -1,0 +1,35 @@
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+pair<int,int> find(TreeNode<int> *root){
+    if(!root)
+        return {0,0};
+    pair<int,int> left = find(root->left);
+    pair<int,int> right = find(root->right);
+    return {max(1+left.second+right.second,max(left.first,right.first)), 1+max(left.second,right.second)};
+}
+int diameterOfBinaryTree(TreeNode<int> *root)
+{
+	// Write Your Code Here.
+    pair<int,int> ans={0,0};
+    if(root){
+        ans = find(root);//here i am getting number of nodes in diameter
+    }
+    return ans.first-1;//we need number of edges as diameter. So do '-1'.
+}
