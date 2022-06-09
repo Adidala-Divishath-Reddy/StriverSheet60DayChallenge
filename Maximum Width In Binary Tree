@@ -1,0 +1,44 @@
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+#include<deque>
+int getMaxWidth(TreeNode<int> *root)
+{
+    // Write your code here.
+    deque<pair<TreeNode<int> *,int>> q;//store node pointer as first and second as node's level 
+    pair<TreeNode<int> *,int> temp={NULL,0};
+    int ans = 0, level = 0,lr=0, maxWidth = 0;
+    if(root){
+        ans = 1; 
+        maxWidth = 1;//atleast 1 will be width because root is there.
+        q.push_back({root,level});
+        while(!q.empty()){
+            temp = q.front();
+            if(temp.first->left)
+                q.push_back({temp.first->left,temp.second+1});
+            if(temp.first->right)
+                q.push_back({temp.first->right,temp.second+1});
+            q.pop_front();
+            if(!q.empty() && temp.second != q.front().second&& ans < q.size())
+                ans = q.size();
+            
+        }
+    }
+    return ans;
+}
