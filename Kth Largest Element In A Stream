@@ -1,0 +1,43 @@
+#include<queue>
+
+class Kthlargest {
+public:
+    priority_queue<int,vector<int>,greater<int>> pq;
+
+    int k;
+    Kthlargest(int k, vector<int> &arr) {
+       // Write your code here.
+        this->k = k;
+        for(auto i:arr){
+
+                if(pq.size()<k)
+                    pq.push(i);
+                else if(!pq.empty() && pq.top() < i){
+                    pq.pop();
+                    pq.push(i);
+
+            }
+        }
+    }
+
+    void add(int num) {
+        // Write your code here.
+
+        if(pq.size() < k)
+            pq.push(num);
+        else{
+            if(!pq.empty() && pq.top() < num)
+            {
+                pq.pop();
+                pq.push(num);
+            }
+        }
+        
+    }
+
+    int getKthLargest() {
+       // Write your code here.
+        return pq.top();
+    }
+
+};
