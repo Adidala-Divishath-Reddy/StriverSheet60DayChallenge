@@ -1,0 +1,15 @@
+int bellmonFord(int n, int m, int src, int dest, vector<vector<int>> &edges) {
+    // Write your code here.
+    int mini = 1000000000;
+    unordered_map<int,int> um;
+    for(int i=1; i<=n; i++){
+        um[i] = (i==src) ? 0: mini;
+    }
+    for(int i=1; i<n; i++){
+         for(auto edge: edges){
+             	if((um[edge[0]] != mini) && (um[edge[1]] > um[edge[0]] + edge[2]))
+             	um[edge[1]] = um[edge[0]] + edge[2];
+         }
+    }
+    return um[dest];
+}
