@@ -1,0 +1,39 @@
+void find(int r, int c, int nc, vector<vector<int>>& ans,
+             vector<vector<int>>& image){
+        if(r>0 && image[r-1][c] == image[r][c] && ans[r-1][c] != nc){
+                ans[r-1][c] = nc;
+                find(r-1, c, nc, ans,image);
+        }
+        if(c>0 && image[r][c-1] == image[r][c] && ans[r][c-1] != nc){
+            ans[r][c-1] = nc;
+            find(r, c-1, nc, ans,image);
+            
+        }
+        if(r+1<ans.size() && image[r+1][c] == image[r][c] && ans[r+1][c] != nc){
+            ans[r+1][c] = nc;
+            find(r+1, c, nc, ans,image);
+        }
+        if(c+1<ans[0].size() && image[r][c+1] == image[r][c] &&
+          ans[r][c+1] != nc){
+            ans[r][c+1] = nc;
+            find(r, c+1, nc, ans,image);
+        }
+    }
+vector<vector<int>> floodFill(vector<vector<int>> &image, int sr, int sc, int newColor)
+{
+    // Write your code here.
+    vector<vector<int>> ans(image.size());
+        for(int i=0; i<ans.size(); i++){
+            ans[i].resize(image[i].size());
+        }
+        ans[sr][sc] = newColor;
+        find(sr, sc, newColor, ans,image);
+        
+        for(int i=0; i<ans.size(); i++){
+            for(int j=0; j<ans[i].size(); j++)             {
+                if(ans[i][j] != newColor)
+                    ans[i][j] = image[i][j];
+            }
+        }
+        return ans;
+}
