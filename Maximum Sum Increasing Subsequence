@@ -1,0 +1,17 @@
+//very simple logic. O(n^2) solution. Store max sum possible till each index i in dp. Then go like that till end. In dp[i] we will store max sum possible till that index among all subsequences which ends with rack[i]. So if rack[i+1] > rack[i], we can simply add rack[i+1] and dp[i] to get max sum subsequence ending with rack[i+1].
+int maxIncreasingDumbbellsSum(vector<int> &rack, int n)
+{
+	// Write your code here
+    int maxi = 0;
+    vector<int> dp(rack.begin(),rack.end());
+    for(int i=0;i<rack.size();i++){
+        for(int j=i-1;j>=0;j--)
+            if(rack[j]<rack[i] && dp[i]< rack[i]+dp[j]) 
+                dp[i] = rack[i]+dp[j];
+           
+        
+         maxi = max(maxi , dp[i]);
+    }
+
+    return maxi;
+}
