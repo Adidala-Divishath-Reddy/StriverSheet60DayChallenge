@@ -1,0 +1,40 @@
+int ninjaAndLadoos(vector<int> &row1, vector<int> &row2, int m, int n, int k) {
+    // Write your code here.
+    int ans,i,j,count;
+    for(i=0, j=0,count=1; i<row1.size() && j<row2.size(); count++){
+        if(row1[i] < row2[j]){
+            if(count == k){
+            ans = row1[i];
+            break;
+            }
+            i++;
+        }
+        else{
+            if(count == k){
+                ans = row2[j];
+                break;
+            }
+            j++;
+            
+        }
+    }
+    
+    if(i == row1.size()){
+        for(;j<row2.size(); j++,count++){
+            if(count==k){
+                ans = row2[j];
+                break;
+            }
+        }
+    }
+    
+    if(j == row2.size()){
+        for(;i<row1.size(); i++,count++){
+            if(count==k){
+                ans = row1[i];
+                break;
+            }
+        }
+    }
+    return ans;
+}
