@@ -1,0 +1,10 @@
+int cutRod(vector<int> &price, int n)
+{
+	// Write your code here.
+    vector<int> dp(price.begin(),price.end());
+    for(int i=1; i<n; i++)
+        for(int j=i-1; j>=0; j--)
+            dp[i] = dp[i] < dp[j]+dp[i-j-1]? dp[j]+dp[i-j-1]: dp[i];
+        
+    return dp[n-1];
+}
