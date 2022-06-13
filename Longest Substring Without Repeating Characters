@@ -1,0 +1,41 @@
+#include <bits/stdc++.h> 
+int uniqueSubstrings(string s)
+{
+    //Write your code here
+    vector<int> dict(256, -1);
+        int maxLen = 0, start = -1;
+        for (int i = 0; i != s.length(); i++) {
+            if (dict[s[i]] > start)
+                start = dict[s[i]];
+            dict[s[i]] = i;
+            maxLen = max(maxLen, i - start);
+        }
+        return maxLen;
+}
+
+(OR)
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s)     {
+        unordered_map<char,int> um;
+        if(s.length()==0)
+            return 0;
+        int ans = 1, checkpoint=0,i;
+        for(i=0; i<s.length();i++){
+            if(um.find(s[i])!=um.end() && um[s[i]] >= checkpoint){
+                string temp = s.substr(checkpoint,i-checkpoint);
+                int tempLen = temp.length();
+                ans = max(ans,tempLen);
+                checkpoint = um[s[i]]+1;
+            }
+            um[s[i]] = i;
+        }
+        if(i == s.length()){
+            string temp = s.substr(checkpoint,i-checkpoint);
+            int tempLen = temp.length();
+            ans = max(ans,tempLen);
+        }
+        return ans;
+    }
+};
