@@ -1,0 +1,34 @@
+#include <bits/stdc++.h> 
+vector<vector<int>> pairSum(vector<int> &arr, int s){
+   // Write your code here.
+    vector<vector<int>> ans;
+    unordered_map<int,int> um;
+    sort(arr.begin(), arr.end());
+    for(auto i : arr)
+        um[i]++;
+    int temp;
+    for(auto i: arr)
+        if( (i<= s-i) && (um.find(s-i) != um.end())){
+
+            temp =1 ;
+            if(s-i == i){
+                if(um[i]>1){
+// if we have 2 2 2 as array and s= 4. Then 3C2 combinations i.e {2,2},{2,2},{2,2} are needed. So for first 2, we have 2 pairs. Then for 2nd two we will have one pair. Then for 3rd 2 we will have no pairs. So we shld reduce it by 1 everytime.
+                um[i]--;
+                temp = um[i];
+                
+                while(temp--)
+                ans.push_back({i,i});
+                }
+            }
+            else{
+        //if we have -3 3 3 as array and s=0; Then {-3,3}, {-3,3} will be ans
+                if(um[s-i] >1)
+                    temp = um[s-i];
+                while(temp--)
+                ans.push_back({i,s-i});
+            }
+        }
+
+    return ans;
+}
