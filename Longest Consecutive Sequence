@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+int lengthOfLongestConsecutiveSequence(vector<int> &arr, int n) {
+    // Write your code here.
+    unordered_map<int,int> um;
+    for(auto i:arr)
+        um[i]++;
+    int prev = -1, maxi= INT_MIN,count=1,temp;
+    for(auto i: um){
+        if(i.second == 0)//if this number is already been part of consequence
+            continue;
+        if(um.find(i.first - 1)!= um.end())//if this is not starting of consequence
+            continue;
+        um[i.first] = 0;//make it as zero so that if we have two 9 10 9. Then only one 9 10 consequence will be counted. 
+        count=1;
+        temp = i.first+1;
+        while(um.find(temp) != um.end()){
+            um[temp] = 0;//make every number which is involved in consequence as seen;
+            temp++;
+             count++;
+        }
+        maxi = max(maxi,count);
+    }
+    return maxi;
+}
