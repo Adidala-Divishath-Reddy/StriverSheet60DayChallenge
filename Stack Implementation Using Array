@@ -1,0 +1,50 @@
+// Stack class.
+class Stack {
+    
+public:
+    int *arr, i=-1, n;
+    Stack(int capacity) {
+        // Write your code here.
+        arr = new int[capacity];
+        n = capacity;
+    }
+
+    void push(int num) {
+        // Write your code here.
+        i++;
+        arr[i] = num;
+        
+    }
+
+    int pop() {
+        // Write your code here.
+        if(i == -1)
+            return -1;
+        i--;
+        return arr[i+1];
+    }
+    
+    int top() {
+        // Write your code here.
+        if(i == -1)
+            return -1;
+        return arr[i];
+    }
+    
+    int isEmpty() {
+        // Write your code here.
+        if(i == -1)
+            return true;
+        else 
+            return false;
+    }
+    
+    int isFull() {
+        // Write your code here.
+        if(i == n)
+            return true;
+        else 
+            return false;
+    }
+    
+};
