@@ -1,0 +1,8 @@
+int uniqueElement(vector<int> arr, int n)
+{
+	// Write your code here
+    int ans = 0;
+    for(auto i: arr)
+        ans ^= i;
+   return ans;
+}
