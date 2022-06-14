@@ -1,0 +1,29 @@
+#include<vector>
+#include<algorithm>
+
+//.Sort acc to ending points in increasing order. if ending points are same, then put pair which occured first accoring to index
+bool comp(pair<pair<int,int>,int> &a, pair<pair<int,int>,int> &b){
+    return a.first.second != b.first.second ? a.first.second < b.first.second : a.second < b.second; 
+}
+vector<int> maximumMeetings(vector<int> &start, vector<int> &end) {
+    // Write your code here.
+    vector<pair<pair<int,int>,int>> se;
+    
+//     vector<int> deadline(*max_element(end.begin(), end.end())+1);
+    for(int i=0; i<start.size() ; i++)
+        se.push_back({{start[i],end[i]},i+1});
+    sort(se.begin(), se.end(), comp);
+    int end_point = se[0].first.second;
+    vector<int> ans;
+    ans.push_back(se[0].second);
+    
+    //Just add the pair's index(1's indexed) if it is not colliding with previously added pair.
+    for(int i=1; i < se.size(); i++){
+        if(se[i].first.first > end_point){
+//             cout<<"i:"<<i<<" "<<se[i].first <<" "<<end_point<<endl;
+            ans.push_back(se[i].second);
+            end_point = se[i].first.second;
+        }
+    }
+    return ans;
+}
