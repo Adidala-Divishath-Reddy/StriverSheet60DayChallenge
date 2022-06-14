@@ -1,0 +1,159 @@
+// O(n^2) solution
+
+#include<algorithm>
+bool comp(vector<int>& a, vector<int>& b){
+    return a[1] > b[1];
+}
+
+int jobScheduling(vector<vector<int>> &jobs)
+{
+    // Write your code here
+    sort(jobs.begin(), jobs.end(), comp);
+    int profit = 0;
+    int max_deadline = INT_MIN;
+    for(auto i:jobs)
+        max_deadline = max_deadline < i[0] ? i[0] : max_deadline;
+    vector<int> arr(max_deadline+1,0);//all slots r free initally
+    int temp;
+    for(auto i: jobs){
+        if(arr[i[0]]){
+            temp = i[0]-1;
+            while(temp >=1 && arr[temp])
+                temp--;
+            if(temp>=1){
+                arr[temp] = 1;
+                profit += i[1];
+            }
+        }
+        else
+        {
+            arr[i[0]] = 1;
+            profit += i[1];
+        }
+    }
+    return profit;
+}
+
+(OR)
+GEEKS FOR GEEKS O(nlog n) algo:- 
+The algorithm goes as follow:
+
+1) Sort the jobs based on their deadlines.
+2) Iterate from the end and calculate the available slots between every two consecutive deadlines. Include the profit, deadline, and job ID of ith job in the max heap.
+3) While the slots are available and there are jobs left in the max heap, include the job ID with maximum profit and deadline in the result.
+4) Sort the result array based on their deadlines.
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// A structure to represent a job
+struct Job {
+	char id; // Job Id
+	int dead; // Deadline of job
+	int profit; // Profit earned if job is completed before
+				// deadline
+};
+
+// Custom sorting helper struct which is used for sorting
+// all jobs according to profit
+struct jobProfit {
+	bool operator()(Job const& a, Job const& b)
+	{
+		return (a.profit < b.profit);
+	}
+};
+
+// Returns minimum number of platforms required
+void printJobScheduling(Job arr[], int n)
+{
+	vector<Job> result;
+	sort(arr, arr + n,
+		[](Job a, Job b) { return a.dead < b.dead; });
+	// set a custom priority queue
+	priority_queue<Job, vector<Job>, jobProfit> pq;
+	for (int i = n - 1; i >= 0; i--) {
+		int slot_available;
+		// we count the slots available between two jobs
+		if (i == 0) {
+			slot_available = arr[i].dead;
+		}
+		else {
+			slot_available = arr[i].dead - arr[i - 1].dead;
+		}
+		// include the profit of job(as priority),
+		// deadline and job_id in maxHeap
+		pq.push(arr[i]);
+		while (slot_available > 0 && pq.size() > 0) {
+			// get the job with the most profit
+			Job job = pq.top();
+			pq.pop();
+			// reduce the slots
+			slot_available--;
+			// add it to the answer
+			result.push_back(job);
+		}
+	}
+	// sort the result based on the deadline
+	sort(result.begin(), result.end(),
+		[&](Job a, Job b) { return a.dead < b.dead; });
+	// print the result
+	for (int i = 0; i < result.size(); i++)
+		cout << result[i].id << ' ';
+	cout << endl;
+}
+
+int main()
+{
+	// Driver code
+	Job arr[] = { { 'a', 2, 100 },
+				{ 'b', 1, 19 },
+				{ 'c', 2, 27 },
+				{ 'd', 1, 25 },
+				{ 'e', 3, 15 } };
+	int n = sizeof(arr) / sizeof(arr[0]);
+	cout << "Following is maximum profit sequence of jobs "
+			"\n";
+
+	// Function call
+	printJobScheduling(arr, n);
+	return 0;
+}
+
+// This code is contributed By Reetu Raj Dubey
+
+(OR)
+// O(nlogn) my code
+
+#include<algorithm>
+#include<queue>
+struct comp{
+    bool operator()(vector<int>& a, vector<int>& b){
+    return a[1] < b[1]; // for creating max heap, we should take min among two. Y bcoz priority queue works in reverse order;
+    }
+};
+bool compare(vector<int>& a, vector<int>& b){
+    return a[0]<b[0];//sort jobs array according to deadline in increasing order
+}
+int jobScheduling(vector<vector<int>> &jobs)
+{
+    // Write your code here
+    priority_queue<vector<int>, vector<vector<int>>, comp> pq;
+    sort(jobs.begin(), jobs.end(),compare);
+    int profit = 0, numberOfSlotsAvailable;
+    for(int i= jobs.size()-1; i>=0; i--){
+        if(!i)
+            numberOfSlotsAvailable = jobs[i][0];
+        else
+            numberOfSlotsAvailable = jobs[i][0] - jobs[i-1][0];
+        pq.push(jobs[i]);
+        while(numberOfSlotsAvailable && !pq.empty()){
+            profit += pq.top()[1];
+            pq.pop();
+            numberOfSlotsAvailable--;
+        }
+    }
+    return profit;
+}
+
