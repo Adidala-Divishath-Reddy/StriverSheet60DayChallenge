@@ -1,0 +1,52 @@
+#include<unordered_map>
+#include<limits.h>
+int longestSubSeg(vector<int> &arr , int n, int k){
+    // Write your code here.
+    unordered_map<int,int> um;
+    int cum=0, maxi = INT_MIN,i;
+    for(i=0; i< arr.size(); i++){
+        cum += 1-arr[i];
+        if(um.find(cum) == um.end())//store at what index first occurence of that cum sum has occured
+            um[cum] = i;
+        if(cum < k)
+            continue; // if k is not reached yet, then keep on continuing
+        
+        while(i+1 < arr.size() && arr[i+1])//after seeing '0' even if we have n 1's after that we don't care. We can count them to get bigger subset. 
+            i++;
+        if(cum >k)
+            maxi = max(maxi, i - um[cum-k]);//case 1: if subset is not started from index '0'
+        else if(cum == k)
+            maxi = max(maxi, i - um[cum-k]+1);//case 2: if subset is started from index '0'
+        
+    }
+    if(k >= cum)// if k is bigger or equal to number of zeroes in array. We can remove all 0's and answer will be total array size.
+        return arr.size();
+    maxi = max(maxi, i-um[cum-k]-1);// if we have reached end of the array. Then i+1 will be where we are standing. So remove that extra index. reamaining is same as case 1.
+    return maxi;
+}
+
+(OR)
+
+int longestSubSeg(vector<int> &arr , int n, int k){
+    // Write your code here.
+    int j=-1;
+    int zeroCount=0;
+    int ans=0;
+    
+    for(int i=0;i<n;i++){
+        if(arr[i]==0){
+            zeroCount++;
+        }
+        while(zeroCount>k){
+            j++;
+            if(arr[j]==0){
+                zeroCount--;
+            }
+        }
+        int len=i-j;
+        if(len>ans){
+            ans=len;
+        }
+    }
+    return ans;
+}
