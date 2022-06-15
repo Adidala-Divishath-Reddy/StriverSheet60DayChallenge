@@ -1,0 +1,32 @@
+#include<queue>
+struct comp{
+    bool operator()(pair<int,int> &a, pair<int,int> &b){
+        return a.first > b.first;
+    }
+};
+vector<int> mergeKSortedArrays(vector<vector<int>>&kArrays, int k)
+{
+    // Write your code here. 
+    
+    //k = rows. 
+    vector<int> ans;
+    vector<int> pointers(k,1);
+    priority_queue<pair<int,int>,vector<pair<int,int>>, comp> pq;
+    int index;
+    
+//  It is guarenteed that atleast one atleast 1 element will be in each row.
+    for(int i=0; i<k; i++)
+        pq.push({kArrays[i][0], i});
+    while(1){
+        ans.push_back(pq.top().first);
+        index = pq.top().second;
+        pq.pop();
+        if(pointers[index] < kArrays[index].size()){
+            pq.push({kArrays[index][pointers[index]], index});
+            pointers[index]++;
+        }
+        if(pq.empty())
+            break;
+    }
+    return ans;
+}
