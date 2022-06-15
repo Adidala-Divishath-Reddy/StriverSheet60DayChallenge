@@ -1,0 +1,38 @@
+#include<queue>
+void findMedian(int *arr, int n)
+{
+    // Write your code here
+    priority_queue<int> maxHeap;
+    priority_queue<int,vector<int>,greater<int>> minHeap;
+    int num;
+    for(int i=0; i<n; i++){
+        num = arr[i];
+        if(minHeap.size() == 0 && maxHeap.size()==0){
+            maxHeap.push(num);
+        }
+        else if(num > maxHeap.top())
+            minHeap.push(num);
+        else
+            maxHeap.push(num);
+        int x= minHeap.size()-maxHeap.size();
+        if(abs(x) > 1){
+            if(minHeap.size() > maxHeap.size())
+            {
+                maxHeap.push(minHeap.top());
+                minHeap.pop();
+            }
+            else{
+                minHeap.push(maxHeap.top());
+                maxHeap.pop();
+            }  
+        }
+    
+        
+        if(minHeap.size() > maxHeap.size())
+            cout<< minHeap.top()<<" ";
+        else if(minHeap.size() < maxHeap.size())
+            cout<<maxHeap.top()<<" ";
+        else
+            cout<<(minHeap.top()+maxHeap.top())/2<<" ";
+    }
+}
