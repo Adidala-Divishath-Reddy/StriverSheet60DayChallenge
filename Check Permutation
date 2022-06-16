@@ -1,0 +1,17 @@
+#include<unordered_map>
+bool areAnagram(string &str1, string &str2){
+    // Write your code here.
+    unordered_map<char, int> um;
+    for(char &ch: str1)
+        um[ch]++;
+    for(char &ch: str2){
+        if(um.find(ch) == um.end())//If there is a character present in str2 which is not in str1, it is not anagram.
+            return false;
+        um[ch]--;
+        if(um[ch] == 0) // Remove entry from map if that value is zero.
+            um.erase(ch);
+    }
+    if(!um.size()) // map should be empty if it is anagram.
+        return true;
+    return false;
+}
