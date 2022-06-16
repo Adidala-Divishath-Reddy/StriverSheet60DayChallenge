@@ -1,0 +1,31 @@
+#include<algorithm>
+string reverseString(string str)
+{
+    // Write your code here.
+    reverse(str.begin(), str.end());
+    vector<string> words;
+    int j=0,i=0;
+    while(str[i] == ' ')
+        i++;
+    for(; i<=str.length(); i++)
+    {
+        if(i == str.length())
+            words.push_back(str.substr(j, i-j));
+        else if(str[i] == ' '){
+            words.push_back(str.substr(j, i-j));
+            while(str[i+1] == ' ')
+                i++;
+            j = i+1;   
+         
+        }
+            
+    }
+    string ans;
+    for(int i=0; i<words.size(); i++){
+        reverse(words[i].begin(),words[i].end());
+        ans+=words[i];
+        if(i != words.size()-1)
+            ans+=" ";
+    }
+    return ans;
+}
