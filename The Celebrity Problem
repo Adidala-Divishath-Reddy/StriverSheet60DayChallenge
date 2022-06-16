@@ -1,0 +1,29 @@
+/*
+	This is signature of helper function 'knows'.
+	You should not implement it, or speculate about its implementation.
+
+	bool knows(int A, int B); 
+	Function 'knows(A, B)' will returns "true" if the person having
+	id 'A' know the person having id 'B' in the party, "false" otherwise.
+*/
+
+int findCelebrity(int n) {
+ 	// Write your code here.
+    int ans = -1, celebrity=0;
+    for(int i=1; i<n;i++){
+        if(knows(celebrity,i)) // is present assumed celebrity knows another person. Then he is not celebrity. So change celebrity to i.
+            celebrity = i;
+    }
+    
+    //Now assumed celebrity may not be celebrity. So we should check that he/she don't know remaining all and remaining all shld know him. 
+    //Even if One case is faile, he will not be celebrity. So if flag becomes zero, he is not celebrity. Else he is celebrity.
+    int flag = 1;
+    for(int i=0; i<n; i++){
+        if(i!= celebrity && (knows(celebrity, i) || !knows(i,celebrity)))
+            flag = 0;
+    }
+    
+    if(flag)
+       ans = celebrity;
+    return ans;
+}
