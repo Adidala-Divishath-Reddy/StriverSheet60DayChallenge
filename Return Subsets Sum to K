@@ -1,0 +1,23 @@
+vector<vector<int>> ans; 
+void fnc(vector<int> &num,int index,  vector<int> temp, int SubsetSum, int k){
+    if(index == num.size())
+    {
+        if(SubsetSum == k)
+            ans.push_back(temp);
+        return ;
+    }
+    //for every element we will have two options. Either we can include it or not include it.
+        fnc(num, index+1, temp, SubsetSum, k);
+        temp.push_back(num[index]);
+        fnc(num, index+1, temp, SubsetSum+num[index], k);
+   
+    
+}
+vector<vector<int>> findSubsetsThatSumToK(vector<int> num, int n, int k)
+{
+    // Write your code here.
+    vector<int> temp;
+    ans.clear();
+    fnc(num,0,temp, 0, k);
+    return ans;
+}
