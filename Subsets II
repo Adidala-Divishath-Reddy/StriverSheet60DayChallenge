@@ -1,0 +1,31 @@
+#include<algorithm>
+#include<set>
+
+set<vector<int>> ans; 
+void fnc(vector<int> &num,int index,  vector<int> temp){
+    if(index == num.size()){
+        //sorting the vector so that elements will be in order.
+        sort(temp.begin(), temp.end());
+        //inserting vector into array so that already if that vector is present as other subset, it will not count that. 
+        ans.insert(temp);
+        return ;
+    }
+    //for every element we will have two options. Either we can include it or not include it.
+        fnc(num, index+1, temp);
+        temp.push_back(num[index]);
+        fnc(num, index+1, temp);
+   
+    
+}
+vector<vector<int>> uniqueSubsets(int n, vector<int> &num)
+{
+    // Write your code here.
+    vector<int> temp;
+   ans.clear();
+   fnc(num,0,temp);
+//    sort(ans.begin(),ans.end());
+    vector<vector<int>> answer;
+    for(auto i: ans)
+        answer.push_back(i);
+    return answer;
+}
