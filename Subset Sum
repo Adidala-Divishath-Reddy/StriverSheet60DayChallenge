@@ -1,0 +1,22 @@
+vector<int> ans;
+void fnc(vector<int> &num,int index,int sum){
+    if(index == num.size()){
+        
+        ans.push_back(sum);
+        return ;
+    }
+      //for every element we will have two options. Either we can include it or not include it.
+        fnc(num, index+1, sum);
+        fnc(num, index+1, sum + num[index]);
+   
+    
+}
+vector<int> subsetSum(vector<int> &num)
+{
+    // Write your code here.
+   ans.clear();
+   fnc(num,0,0);
+   sort(ans.begin(),ans.end());
+    return ans;
+        
+}
