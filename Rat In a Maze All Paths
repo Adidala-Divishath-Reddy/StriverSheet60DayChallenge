@@ -1,0 +1,42 @@
+void dfs(vector<vector<int> > &maze, vector<vector<int>> &ans,int i, int j, vector<int> &temp, string dir, vector<vector<int> > &visited){
+    
+    
+    //if indices are out of bound or if maze have block '0' or if that cell is already visited, then return
+    if(i>=maze.size() || j>=maze[0].size() || !maze[i][j] || visited[i][j] )
+        return;
+    
+//     Store the index which is in the path
+    temp.push_back(i*maze.size() + j);
+    visited[i][j] = 1;
+    if(i == maze.size()-1 && j == maze[0].size()-1){
+//         if we have reached end cell, then make all the cells which are visited in the path as '1' and else as '0'
+        vector<int> answer(maze.size()*maze.size(),0);
+        for(auto i: temp)
+            answer[i] = 1;
+        ans.push_back(answer);
+    }
+    else{
+        if(dir!= "FD")
+            dfs(maze, ans, i+1, j, temp, "FT", visited);
+        if(dir!= "FR")
+            dfs(maze, ans, i, j+1, temp, "FL", visited);
+        if(dir!= "FL")
+            dfs(maze, ans, i, j-1, temp, "FR", visited);
+        if(dir!= "FT")
+            dfs(maze, ans, i-1, j, temp, "FD", visited);
+    }
+    temp.pop_back();
+//     Make visited as non visited.
+    visited[i][j] = 0;
+}
+vector<vector<int> > ratInAMaze(vector<vector<int> > &maze, int n){
+  // Write your code here.
+    vector<vector<int>> ans, visited(n,vector<int>(n,0));
+//     vector<vector<int> > blank, answer(n, vector<int>(n,0));
+    vector<int> temp;
+
+    dfs(maze, ans,0,0, temp, "", visited);
+
+    
+    return ans;
+}
