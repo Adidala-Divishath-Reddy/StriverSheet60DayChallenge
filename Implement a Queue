@@ -1,0 +1,38 @@
+#include<list>
+class Queue {
+public:
+    list<int> l;
+    Queue() {
+        // Implement the Constructor
+    }
+
+    /*----------------- Public Functions of Queue -----------------*/
+
+    bool isEmpty() {
+        // Implement the isEmpty() function
+        if(l.empty())
+            return true;
+        return false;
+    }
+
+    void enqueue(int data) {
+        // Implement the enqueue() function
+        l.push_back(data);
+    }
+
+    int dequeue() {
+        // Implement the dequeue() function
+        if(l.empty())
+            return -1;
+        int x = l.front();
+        l.pop_front();
+        return x;
+    }
+
+    int front() {
+        // Implement the front() function
+        if(l.empty())
+            return -1;
+        return l.front();
+    }
+};
