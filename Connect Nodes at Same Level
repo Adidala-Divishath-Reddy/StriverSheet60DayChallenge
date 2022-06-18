@@ -1,0 +1,47 @@
+/*
+    ----------------- Binary Tree node class for reference -----------------
+
+    template <typename T>
+    class BinaryTreeNode {
+        public : 
+            T data;
+            BinaryTreeNode<T> *left;
+            BinaryTreeNode<T> *right;
+            BinaryTreeNode<T> *next;
+
+            BinaryTreeNode(T data) {
+                this -> data = data;
+                left = NULL;
+                right = NULL;
+                next = NULL;
+            }
+    };
+*/
+
+#include<vector>
+int findHeight(BinaryTreeNode< int >* root){
+    if(!root)
+        return 0;
+    return 1 + findHeight(root->left) + findHeight(root->right);
+}
+
+
+void create(BinaryTreeNode< int >* root, int level, vector<BinaryTreeNode<int> *> &nextNodesInEachLevel){
+
+    if(root){
+        create(root->right, level+1, nextNodesInEachLevel);
+        root->next = nextNodesInEachLevel[level];
+        nextNodesInEachLevel[level] = root;
+        create(root->left, level+1, nextNodesInEachLevel);
+    }
+    
+}
+
+
+void connectNodes(BinaryTreeNode<int> *root) {
+    // Write your code here.
+    int height = findHeight(root);
+    vector<BinaryTreeNode<int> *> nextNodesInEachLevel(height, NULL);
+    if(root)
+      create(root, 0, nextNodesInEachLevel);
+}
