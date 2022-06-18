@@ -1,0 +1,47 @@
+/************************************************************
+
+    Following is the TreeNode class structure:
+
+    class BinaryTreeNode {
+    public:
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+        
+        BinaryTreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+        
+        ~BinaryTreeNode() {
+            if (left) {
+              delete left;
+            }
+            if (right) {
+              delete right;
+            }
+        }
+    };
+
+************************************************************/
+
+int findCeil(BinaryTreeNode<int> *root, int X){
+    // Write your code here.
+    int mini= INT_MAX, value=-1;
+    BinaryTreeNode<int> *curr = root;
+    while(curr){
+        if(curr->data == X)
+            return X;
+        else if(curr->data < X)
+            curr = curr->right;
+        else if(curr->data > X){
+            if(mini > curr->data-X){
+                mini = curr->data-X;
+                value = curr->data;
+            } 
+            curr = curr->left;
+        }
+    }
+    return value;
+}
