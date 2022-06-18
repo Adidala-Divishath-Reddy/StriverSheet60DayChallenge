@@ -1,0 +1,105 @@
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+#include<vector>
+class BSTiterator
+{
+
+    vector<int> InorderNodes;
+    int index = 0;
+    void Inorder(TreeNode<int>* root, vector<int> &InorderNodes){
+        if(root){
+            Inorder(root->left, InorderNodes);
+            InorderNodes.push_back(root->data);
+            Inorder(root->right, InorderNodes);
+        }
+    }  
+
+public:
+    BSTiterator(TreeNode<int> *root)
+    {
+        // write your code here
+        InorderNodes.clear();
+        Inorder(root, InorderNodes);
+    }
+
+    int next()
+    {
+        // write your code here
+        
+        return  InorderNodes[index++];
+    }
+
+    bool hasNext()
+    {
+        // write your code here
+        if(index >= InorderNodes.size()){
+            InorderNodes.clear();
+            return false;
+        }
+        return true;
+    }
+};
+
+
+/*
+    Your BSTIterator object will be instantiated and called as such:
+    BSTIterator iterator(root);
+    while(iterator.hasNext())
+    {
+       print(iterator.next());
+    }
+*/
+
+(OR)
+
+#include<bits/stdc++.h>
+class BSTiterator
+{
+	public:
+	stack<TreeNode<int> *> st;
+    BSTiterator(TreeNode<int> *root)
+    {
+		inorder(root);
+    }
+
+    int next()
+    {
+     	TreeNode<int>* t = st.top();
+		st.pop();
+		if(t->right){
+			inorder(t->right);
+		}
+		return t->data;
+    }
+
+    bool hasNext()
+    {
+        return !st.empty();
+    }
+	
+	void inorder(TreeNode<int> * root){
+        TreeNode<int> * cur=root;
+        while(cur){
+            st.push(cur);
+            cur=cur->left;
+        }
+    }
+	
+};
