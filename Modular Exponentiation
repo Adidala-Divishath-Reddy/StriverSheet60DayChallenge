@@ -1,0 +1,14 @@
+#include <bits/stdc++.h> 
+long long int modularExponentiation(long long int x, long long int n, long long int m) {
+    
+	// Write your code here.
+    if(n==0)
+        return 1;
+    if(n==1)
+        return x%m; 
+    long long int temp = modularExponentiation(x,n/2,m);
+    if(n%2)
+        return (((temp*temp)%m)*x)%m ;
+    else
+        return (temp*temp)%m;
+}
