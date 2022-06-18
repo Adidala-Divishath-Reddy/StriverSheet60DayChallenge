@@ -1,0 +1,20 @@
+void fnc(vector<int> &v, int index, vector<int> &temp, vector<vector<int>> &ans){
+    if(index == v.size())
+    {
+        ans.push_back(temp);
+        return;
+    }
+    fnc(v, index+1, temp, ans);
+    temp.push_back(v[index]);
+    fnc(v, index+1, temp, ans);
+    temp.pop_back();
+}
+vector<vector<int>> pwset(vector<int>v)
+{
+    //Write your code here
+    
+    vector<vector<int>> ans;
+    vector<int> temp;
+    fnc(v, 0, temp, ans);
+    return ans;
+}
