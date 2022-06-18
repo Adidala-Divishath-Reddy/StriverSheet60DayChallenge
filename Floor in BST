@@ -1,0 +1,40 @@
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+int floorInBST(TreeNode<int> * root, int X)
+{
+    // Write your code here.
+    int mini= INT_MAX, value;
+    TreeNode<int> *curr = root;
+    while(curr){
+        if(curr->val == X)
+            return X;
+        else if(curr->val > X)
+            curr = curr->left;
+        else if(curr->val < X){
+            if(mini > X-curr->val){
+                mini = X-curr->val;
+                value = curr->val;
+            } 
+            curr = curr->right;
+        }
+    }
+    return value;
+}
