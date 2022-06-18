@@ -1,0 +1,33 @@
+void dfs(vector<int> &visited, int vertex, 
+         unordered_map<int, list<int>> &um, vector<int> &temp){
+        if(!visited[vertex]){
+            visited[vertex] = 1;
+            temp.push_back(vertex);
+             for(auto i: um[vertex])
+                 if(!visited[i])
+                    dfs(visited,i,um, temp);
+                 
+
+         }
+}
+vector<vector<int>> depthFirstSearch(int V, int E, vector<vector<int>> &edges)
+{
+    // Write your code here
+    vector<vector<int>> ans;
+    vector<int> visited(V,0), temp;
+    unordered_map<int, list<int>> um;
+    for(auto i: edges){
+        um[i[0]].push_back(i[1]);
+        um[i[1]].push_back(i[0]);
+    }
+    for(int i=0; i<V;i++)
+        if(!visited[i]){
+            
+
+            temp.clear();
+            dfs(visited,i,um, temp);
+
+            ans.push_back(temp);
+        }
+    return ans;
+}
