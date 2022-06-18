@@ -1,0 +1,47 @@
+#include<unordered_map>
+#include<queue>
+#include<list>
+#include<algorithm>
+bool comp(pair<int, int> &a, pair<int, int> &b){
+    return a.first != b.first ? a.first<b.first : a.second<b.second;
+}
+vector<int> BFS(int V, vector<pair<int, int>> edges)
+{
+    // Write your code here
+//     vector<vector<int>> ans;
+    
+    int edgesSize = edges.size();
+//     It is undirected. So we should have two sided entries.
+    for(int i=0; i<edgesSize; i++)
+        edges.push_back({edges[i].second,edges[i].first});
+    
+//     Sorting edges so that in BFS traversal first smaller numbered node will be entered into um and then it will be treversed first. 
+    sort(edges.begin(), edges.end(), comp);
+    vector<int> ans, visited(V,0), temp;
+    unordered_map<int, list<int>> um;
+    for(auto i: edges){
+        um[i.first].push_back(i.second);
+        um[i.second].push_back(i.first);
+    }
+    queue<int> q;
+    q.push(0);
+    visited[0] = 1;
+    int vertex;
+    while(!q.empty()){
+        vertex = q.front();
+        q.pop();
+        ans.push_back(vertex);
+        for(auto i: um[vertex])
+            if(!visited[i]){
+                q.push(i);
+                visited[i] = 1;
+            }
+        
+        
+    }
+    
+    for(int i=0; i<V; i++)
+        if(!visited[i])
+            ans.push_back(i);
+    return ans;
+}
