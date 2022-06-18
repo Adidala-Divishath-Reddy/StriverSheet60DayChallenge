@@ -1,0 +1,63 @@
+/**********************************************************
+
+    Following is the Binary Tree Node structure:
+
+    template <typename T>
+    class BinaryTreeNode {
+        public: 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~BinaryTreeNode() {
+            if (left)
+                delete left;
+            if (right)
+                delete right;
+        }
+    };
+***********************************************************/
+#include<unordered_map>
+
+//store all elements which are present in tree in hashtable
+void Inorder(BinaryTreeNode<int>* root, unordered_map<int, BinaryTreeNode<int> *> &InorderNodes){
+    if(root){
+        Inorder(root->left, InorderNodes);
+        InorderNodes[root->data] = root;
+        Inorder(root->right, InorderNodes);
+    }
+}
+
+//Do inorder traversal and find whether there exists pair for atleast one element. 
+void findPair(BinaryTreeNode<int>* root, unordered_map<int, BinaryTreeNode<int> *> &InorderNodes, int &k, bool &found){
+    if(root){
+        if(found) //To save time, we are returning immediately why because already pair is found.
+            return;
+        findPair(root->left, InorderNodes,k, found);
+        
+        if(root->data != k-root->data && InorderNodes.find(k-root->data) != InorderNodes.end()){
+            found = true;
+            return;
+        }
+        
+        if(found)
+            return;
+        findPair(root->right, InorderNodes,k, found);
+    }
+}
+
+bool pairSumBst(BinaryTreeNode<int> *root, int k)
+{
+    // Write your code here
+    unordered_map<int, BinaryTreeNode<int> *> InorderNodes;
+    Inorder(root, InorderNodes);
+    bool found = false;
+    findPair(root, InorderNodes, k, found);
+    return found;
+}
