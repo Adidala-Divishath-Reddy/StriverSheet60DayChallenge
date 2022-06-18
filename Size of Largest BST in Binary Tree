@@ -1,0 +1,54 @@
+/************************************************************
+
+    Following is the Binary Tree node structure
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+
+int traversal(TreeNode<int> *root, int &maxi){
+    if(!root)
+        return 0;
+    int left = traversal(root->left,maxi);
+    int right = traversal(root->right,maxi);
+    int overall = 1;
+    
+//     Here comes the main logic. Here we have many rules. subtree to which current node is root will become BST iff LeftSubtree and RightSubstree are BST's.
+//     Case 1: If left subtree or right subtree is empty. Then fine
+//     Case 2: If left subtree didn't return -1(so Left SubTree it is BST) and current node's value should be greater than left node's value and left node's right child value also should be less than current node's value and current node's value should be lesser than right node's value and right node's left child value also should be greater than current node's value. then only current node will be root of a BST.
+    if((!root->left || left!=-1 && (root->left && root->left->data < root->data && !root->left->right || root->left->right && root->data > root->left->right->data))
+       && (!root->right || right!=-1 && (root->right && root->right->data > root->data && !root->right->left || root->right->left && root->data < root->right->left->data)))
+        overall+=left+right;
+    else // if subtree to which current node is root is not BST, then return -1
+        return -1;
+    maxi  = maxi < overall ?  overall : maxi;
+//     cout<<root->data<<" "<<overall<<endl;
+    return overall;
+}
+
+int largestBST(TreeNode<int>* root) 
+{
+    // Write your code here.
+    int maxi = INT_MIN;
+    traversal(root,maxi);
+    return maxi;
+}
