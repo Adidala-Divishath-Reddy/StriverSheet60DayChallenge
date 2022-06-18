@@ -1,0 +1,45 @@
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+//simple logic. Inorder will give sorted ascending order. So, kth element which will be explored will be the kth largest element.  
+void Inorder(TreeNode<int>* root, int &k, bool &found, int &ans){
+    if(root){
+        if(found || k==0)
+            return;
+       Inorder(root->left, k, found, ans);
+        if(found)
+            return;
+        k--;
+        if(k==0){
+            ans = root->data;
+            found = true;
+        }
+         Inorder(root->right, k, found, ans);
+        
+        
+    }
+}
+int kthSmallest(TreeNode<int> *root, int k)
+{
+	//	Write the code here.
+    int ans = -1;
+    bool found = false;
+    Inorder(root,k, found, ans);
+    return ans;
+}
