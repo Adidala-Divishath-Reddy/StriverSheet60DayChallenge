@@ -27,11 +27,10 @@ int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
         
         for(auto i: AdjacencyList[vertex])
         {
-            if(indegree[i]){
             indegree[i]--;
             if(!indegree[i])
                 ZeroIndegreeVertices.push(i);
-            }
+        
         }
         
     }
