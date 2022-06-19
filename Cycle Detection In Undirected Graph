@@ -1,0 +1,36 @@
+#include<unordered_map>
+#include<list>
+
+bool dfs(vector<int> &visited, int vertex, 
+         unordered_map<int, list<int>> &um, int parent){
+        if(!visited[vertex]){
+            visited[vertex] = 1;
+       
+             for(auto i: um[vertex])
+                 if(i!= parent)
+                    if(dfs(visited,i,um, vertex))
+                        return true;
+            return false;
+         }
+    else
+        return true;
+}
+string cycleDetection (vector<vector<int>>& edges, int n, int m)
+{
+    // Write your code here.
+    vector<int> visited(n+1,0);
+    unordered_map<int, list<int>> um;
+    for(auto i: edges){
+        um[i[0]].push_back(i[1]);
+        um[i[1]].push_back(i[0]);
+    }
+    for(int i=1; i<=n;i++)
+        if(!visited[i]){
+
+            if(dfs(visited,i,um,-1))
+                return "Yes";
+        }   
+    return "No";
+}
+    
+
