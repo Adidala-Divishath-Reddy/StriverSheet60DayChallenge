@@ -1,0 +1,41 @@
+#include<unordered_map>
+#include<list>
+#include<queue>
+int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+  // Write your code here.
+    
+    
+    unordered_map<int,int> indegree(n);
+    unordered_map<int,list<int>> AdjacencyList;
+    for(auto i: edges){
+        AdjacencyList[i.first].push_back(i.second);
+        indegree[i.second]++;
+    }
+    queue<int> ZeroIndegreeVertices;
+    for(int i=1; i<=n; i++)
+        if(!indegree[i])
+            ZeroIndegreeVertices.push(i);
+    int vertex;
+    for(int i=1; i<=n; i++){
+    
+//     If vertices with zero degree are zero, then we will have cycle
+        if(ZeroIndegreeVertices.empty())
+            return true;
+        
+        vertex = ZeroIndegreeVertices.front();
+        ZeroIndegreeVertices.pop();
+        
+        for(auto i: AdjacencyList[vertex])
+        {
+            if(indegree[i]){
+            indegree[i]--;
+            if(!indegree[i])
+                ZeroIndegreeVertices.push(i);
+            }
+        }
+        
+    }
+    return false;
+    
+    
+}
