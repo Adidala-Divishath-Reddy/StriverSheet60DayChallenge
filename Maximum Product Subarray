@@ -1,0 +1,15 @@
+int maximumProduct(vector<int> &arr, int n)
+{
+	// Write your code here
+    int res = INT_MIN, minProd = 1, maxProd = 1;
+    for(auto i: arr){
+//         Swap the min and max, so that when we multiply with this negative number, min will become max and max will become min.
+        if(i<0)
+            swap(minProd, maxProd);
+
+        minProd = min(i, minProd*i);
+        maxProd = max(i, maxProd*i);
+        res = max(res, maxProd);
+    }
+    return res;
+}
