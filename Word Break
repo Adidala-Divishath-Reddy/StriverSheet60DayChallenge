@@ -1,0 +1,21 @@
+#include<unordered_map>
+bool wordBreak(vector < string > & arr, int n, string & target) {
+    // Write your code here.
+    
+//     Store all words present in input array into map.
+    unordered_map<string, int> um;
+    for(auto i: arr)
+        um[i]++;
+    
+//  Find whether the substring starting from checkpoint is present in map or no. If yes, then increase checkpoint to i+1;
+    int checkpoint = 0;
+    for(int i=0; i<target.length(); i++)
+        if(um.find(target.substr(checkpoint,i-checkpoint+1)) != um.end())
+            checkpoint = i+1;
+        
+//     If checkpoint reached end of the target. Then whole target is formed with strings of input array. So return true;
+    if(checkpoint == target.length())
+        return true;
+    
+    return false;
+}
