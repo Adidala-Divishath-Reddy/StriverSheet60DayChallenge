@@ -1,0 +1,46 @@
+/************************************************************
+   
+   Following is the TreeNode class structure
+   
+   class TreeNode<T>
+   { 
+   public:
+        T data; 
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+   
+        TreeNode(T data) 
+  		{ 
+            this -> data = data; 
+            left = NULL; 
+            right = NULL; 
+        }
+   };
+   
+   
+ ************************************************************/
+#include<bits/stdc++.h>
+TreeNode<int>* find(vector<int>& inorder, vector<int>& postorder, int inSt, int inEnd, int postSt, int postEnd, unordered_map<int,int> &InorderIndex){
+    if(inSt > inEnd || postSt > postEnd)
+        return NULL;
+    TreeNode<int>* root = new TreeNode<int>(postorder[postEnd]);
+    
+    int numsLeft = InorderIndex[postorder[postEnd]]-inSt;
+    
+    root->left = find(inorder, postorder, inSt, InorderIndex[postorder[postEnd]]-1, postSt, postSt+numsLeft-1, InorderIndex);
+    
+    root->right = find(inorder, postorder, InorderIndex[postorder[postEnd]]+1, inEnd, postSt+numsLeft,postEnd-1, InorderIndex);
+    
+    return root;
+        
+}
+TreeNode<int>* getTreeFromPostorderAndInorder(vector<int>& postOrder, vector<int>& inOrder) 
+{
+	// Write your code here.
+    unordered_map<int,int> InorderIndex;
+    for(int i=0; i<inOrder.size(); i++)
+        InorderIndex[inOrder[i]] = i;
+    
+    return find(inOrder, postOrder, 0, inOrder.size()-1, 0, postOrder.size()-1, InorderIndex);
+     
+}
