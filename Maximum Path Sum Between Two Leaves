@@ -1,0 +1,42 @@
+/************************************************************
+
+    Following is the Tree node structure
+	
+	template <typename T>
+    class TreeNode 
+    {
+        public : 
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) 
+        {
+            this -> val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+#include<limits.h>
+long long int find(TreeNode<int> *root, long long int &currMax){
+    if(!root)
+        return 0;
+    long long int left = find(root->left,currMax);
+    long long int right = find(root->right,currMax);
+//     return pair of max sum in subtrees and sum which involves root.
+    currMax = currMax < root->val+left+right ? root->val+left+right : currMax;
+    return max(root->val +left, root->val + right);
+    
+    
+}
+long long int findMaxSumPath(TreeNode<int> *root)
+{
+    // Write your code here.
+    if(!root || !root->left || !root->right)
+        return -1;
+    long long int currMax = INT_MIN; 
+    find(root,currMax);
+    return currMax;
+}
