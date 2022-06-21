@@ -1,0 +1,44 @@
+/*************************************************************
+
+    Following is the Binary Tree node structure
+
+    template <typename T>
+
+    class TreeNode{
+    public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+        ~TreeNode() {
+            if (left){
+                delete left;
+            }
+            if (right){
+                delete right;
+            }
+        }
+    };
+
+*************************************************************/
+#include<algorithm>
+TreeNode<int>* formTree(vector<int> &preOrder, int st, int End){
+    if(st< 0 || End >=  preOrder.size() || st > End)
+        return NULL;
+    int mid = st + (End-st)/2;
+    TreeNode<int>* root = new TreeNode<int>(preOrder[mid]);
+    root->left = formTree(preOrder, st, mid-1);
+    root->right = formTree(preOrder, mid+1, End);
+    return root;
+}
+TreeNode<int>* preOrderTree(vector<int> &preOrder){
+//     Write your code here.
+//     Sort the preOrder to get Inorder
+    sort(preOrder.begin(), preOrder.end());
+    return formTree(preOrder, 0, preOrder.size()-1); 
+}
