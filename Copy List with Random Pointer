@@ -25,6 +25,7 @@ LinkedListNode<int> *cloneRandomList(LinkedListNode<int> *head)
     if(!head)
         return head;
     LinkedListNode<int> * temp = head, *nextNode, *AnsStartingNode;
+//     Create duplicates in between the nodes like for 1->2->3->4 as 1->1->2->2->3->3->4->4 with random pointers not initialized
     while(temp){
         LinkedListNode<int> *newNode = new LinkedListNode<int>(temp->data);
         newNode->next = temp->next;
@@ -32,6 +33,7 @@ LinkedListNode<int> *cloneRandomList(LinkedListNode<int> *head)
         temp = newNode->next;
     }
     temp = head;
+//     Now we will initialize the randome pointers
     while(temp){
 //         If random pointer is not NULL, then copy that pointer value, else put NULL;
         if(temp->random)
@@ -41,6 +43,7 @@ LinkedListNode<int> *cloneRandomList(LinkedListNode<int> *head)
         temp = temp->next->next;
     }
     temp = head, nextNode = NULL, AnsStartingNode = head->next;
+//     Now seperate the input array and output array
     while(temp->next){
         nextNode = temp->next;
         temp->next = nextNode->next;
