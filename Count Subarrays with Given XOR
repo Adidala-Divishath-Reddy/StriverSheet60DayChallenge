@@ -1,0 +1,18 @@
+#include <bits/stdc++.h> 
+int subarraysXor(vector<int> &arr, int x)
+{
+    //    Write your code here.
+//     Just like in finding out subarrays with given sum, here also we will use hash table. let us divide a sub array 'A' into two parts 'B' and 'C'. XOR(B)^XOR(C) = XOR(A) we know this. Now XOR(C) on both sides. XOB(B) = XOR(A)^XOR(C). So, number of sub arrays which will give XOR(B) will be the number of subarrays possible to give XOR(A);
+    int XOR=0, count=0;
+    
+    unordered_map<int,int> um;
+    for(auto i: arr){
+        XOR ^= i;
+        if(XOR == x)
+            count++;
+        if(um.find(x^XOR) != um.end())
+            count+= um[x^XOR];
+        um[XOR]++;
+    }
+    return count;
+}
