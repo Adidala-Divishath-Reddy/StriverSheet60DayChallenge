@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+
+void rotateMatrix(vector<vector<int>> &mat, int n, int m)
+{
+    // Write your code here
+    int top = 0, down = mat.size()-1, left = 0, right = mat[0].size()-1;
+//     If mat is row matrix or col matrix, we can't rotate clockwise;
+    if(!down || !right)
+        return;
+    int temp;
+    while(top < down && left < right){
+        temp = mat[top][top];
+        for(int i = left+1; i<=right; i++)
+            swap(temp, mat[top][i]);
+        for(int i = top+1; i<=down; i++)
+            swap(temp, mat[i][right]);
+        for(int i = right-1; i>=left; i--)
+            swap(temp, mat[down][i]);
+        for(int i = down-1; i>=top; i--)
+            swap(temp, mat[i][left]);
+        
+        top++, down--, left++, right--;
+    }
+}
