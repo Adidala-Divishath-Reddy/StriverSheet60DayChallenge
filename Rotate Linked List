@@ -1,0 +1,62 @@
+#include <bits/stdc++.h> 
+/********************************
+
+    Following is the class structure of the Node class:
+    
+    class Node
+    {
+    	public:
+    	    int data;
+    	    Node *next;
+    	    Node(int data)
+    	    {
+    	        this->data = data;
+    	        this->next = NULL;
+    	    }
+    };
+
+********************************/
+
+Node *rotate(Node *head, int k) {
+     // Write your code here.
+    if(!head)
+        return head;
+//     reverse the list first
+    Node* curr=NULL, *prev=NULL;
+    int count =0;
+    while(head){
+        count++;
+        curr = head;
+        head = head->next;
+        curr->next = prev;
+        prev = curr;
+    }
+    if(k>count)
+      k = k%count;
+    head = curr, prev = NULL,curr = NULL;
+    Node* LastNodeOf1stHalf = head;
+//     Now reverse the 1st k positions of the list  
+   for(int i=0; i<k;i++){
+        curr = head;
+        head = head->next;
+        curr->next = prev;
+        prev = curr;
+    }
+//     Now reverse the remaining nodes
+//     If k==0 , then above while loop will not rotate anything, Then FirstNodeOfAns will be NULL, else it will be updated
+    Node* FirstNodeOfAns = k!=0 ? curr : NULL;
+    prev = NULL, curr = NULL;
+    int rem = count-k;
+    while(rem--){
+        curr = head;
+        head = head->next;
+        curr->next = prev;
+        prev = curr;
+    }
+//     If FirstNodeOfAns is NULL, then Only 1 list will be presented. So LastNodeOf1stHalf is not needed.
+    if(FirstNodeOfAns)
+        LastNodeOf1stHalf->next = curr;
+    else
+        FirstNodeOfAns = curr;
+    return FirstNodeOfAns;
+}
