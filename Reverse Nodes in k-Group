@@ -1,0 +1,72 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+        class Node
+        {
+        public:
+	        int data;
+	        Node *next;
+	        Node(int data)
+	        {
+		        this->data = data;
+		        this->next = NULL;
+	        }
+        };
+
+*****************************************************************/
+
+Node *getListAfterReverseOperation(Node *head, int n, int b[]){
+	// Write your code here.
+     if(!head)
+        return head;
+//     reverse the list first
+    Node* curr=NULL, *temp = head, *prev=NULL;
+    int count =0;
+//     Get length of linkedlist 
+    while(temp){
+        count++;
+        temp = temp->next;
+    }
+
+   temp = head;
+   prev = NULL,curr = NULL;
+   Node* LastNodeOf1stHalf, *connectingNode=NULL;
+    int k;
+
+   for(int index =0; index<n; index++){
+// If zero nodes to be reversed continue;
+       if(!b[index])
+           continue;
+       k = b[index];
+       if(count ==0)
+           break;
+//        Take minimum of k , remaining nodes in the list. So if k > remaining nodes. Only reverse the remaining nodes.
+       k = min(k, count);
+       count -=k;
+//        This is needed to know the end of sub list after rotation
+       LastNodeOf1stHalf = head;
+       for(int i=0; i<k;i++){
+            curr = head;
+            head = head->next;
+            curr->next = prev;
+            prev = curr;
+        }
+//        If this is not the first sublist to be rotated, then connect the previous reverse list with curr reverse list. Else Take the head of the reversed list
+       if(connectingNode)
+           connectingNode->next = curr;
+        else
+            temp = curr;
+//        Update the new connecting node
+       connectingNode = LastNodeOf1stHalf;
+//     If array b is over and there are still nodes left which are not reversed. So in order to get connected to them we are connecting this.
+       LastNodeOf1stHalf->next = head;
+       prev = NULL;
+   }
+        
+    return temp;
+}
+
+
+
