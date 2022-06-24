@@ -1,0 +1,28 @@
+#include<unordered_set>
+bool comp(string &a, string &b){
+    return a.length() != b.length() ?a.length() < b.length(): a<b;
+}
+string completeString(int n, vector<string> &a){
+    // Write your code here.
+    unordered_set<string> s;
+    for(auto str: a)
+        s.insert(str);
+    string temp, ans;
+    int i;
+    for(auto str: a){
+//         cout<<str<<" ";
+        temp = "";
+        for(i=0; i<str.length(); i++){
+            temp+=str[i];
+            if(s.find(temp) != s.end())
+                continue;
+            else
+                break;
+        }
+        if(i == str.length() && (str.length() > ans.length() || str.length()==ans.length() && str < ans))
+            ans = str;
+    }
+    if(!ans.size())
+        ans = "None";
+    return ans;
+}
