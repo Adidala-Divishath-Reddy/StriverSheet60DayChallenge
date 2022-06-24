@@ -1,0 +1,224 @@
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+class Node
+{
+    public:
+                int key, value, frequency;
+                Node* next, *prev;
+                Node(int key, int value, int frequency)
+                {
+                    this->key = key;
+                    this->value= value;
+                    this->frequency = frequency;
+                    next= NULL;
+                    prev = NULL;
+                }
+};
+
+struct couple 
+{
+    public: int first;
+            int second;
+};
+
+
+class DLL
+{
+    public:     Node* head= NULL, *tail= NULL, *temp=NULL;
+                couple c;
+                void InsertAtBegining(Node* node)
+                {
+                    node->next = head;
+                    if(head)
+                        head->prev = node;
+                    head= node;
+                    
+                    if(!tail)
+                       tail= node;
+            
+                    
+                }
+                 
+                bool isEmpty()
+                {
+                    if(!head)
+                        return true;
+                    else
+                        return false;
+                }
+    
+                void InsertAtEnd(Node* node)
+                {
+                    if(!head)
+                        head =tail= node;
+                    else{
+                        tail->next = node;
+                        node->prev= tail;
+                        tail = node;
+                        }
+                }
+    
+                couple Delete(Node* node)
+                {
+                    if(node->prev == NULL)
+                       return DeleteAtBegining();
+                    
+                    else if(node->next == NULL)
+                       return DeleteAtEnd();
+                    else{
+                        c.first = node->key;
+                        c.second= node->value;
+                        
+                        node->prev->next = node->next;
+                        node->next->prev = node->prev;
+                        node->prev = NULL;
+                        node->next = NULL;
+                        return c;
+                    }
+                }
+                
+                couple DeleteAtBegining()
+                {
+                    temp = head;
+                    if(head)
+                    {
+                        c.first = head->key;
+                        c.second= head->value;
+                        head = head->next;
+                        
+                        temp->next = NULL;
+                        if(head)
+                            head->prev = NULL;
+                        else
+                            tail= NULL;
+                        return c;
+                    }
+                    
+                    return {-1,-1};
+                    
+                    
+                }
+    
+                couple DeleteAtEnd()
+                {
+                        if(tail)
+                        {
+                            c.first = tail->key;
+                            c.second= tail->value;
+                            temp = tail;
+                            tail = tail->prev;
+                            temp->prev = NULL;
+                            if(tail)
+                                tail->next = NULL;
+                            else
+                                head = NULL;
+                            
+                            return c;
+                            
+                        }
+                         return {-1,-1};
+                }
+};
+class LFUCache {
+public:
+    int capacity , data, count=0, freq=1, f;
+    DLL *dll= new DLL();
+    DLL *temp_dll;
+    unordered_map<int, Node*> KeyNode;
+    unordered_map<int, DLL*> FreqDLL;
+    
+    Node* node;
+    couple c;
+    LFUCache(int capacity) {
+          this->capacity = capacity;
+    }
+    
+    int get(int key) {
+        if(KeyNode.find(key) != KeyNode.end())
+        {
+            node= KeyNode[key];
+            temp_dll = FreqDLL[node->frequency];
+            f = node->frequency;
+            if(temp_dll)
+                c = temp_dll->Delete(node);
+            
+            if(f == freq && (!temp_dll || temp_dll->isEmpty()))
+                freq = freq+1;
+            
+            node = new Node(key,c.second, f+1);
+            temp_dll = NULL;
+            if(FreqDLL.find(f+1) == FreqDLL.end())
+            {
+                temp_dll = new DLL();
+                FreqDLL[f+1] = temp_dll;
+            }
+            else
+                temp_dll = FreqDLL[f+1];
+            if(temp_dll)
+                temp_dll->InsertAtEnd(node);
+            
+            temp_dll = NULL;
+            KeyNode.erase(c.first);
+            KeyNode[key]= node;
+            return node->value;
+        }
+        
+        else
+            return -1;
+    }
+    
+    void put(int key, int value) {
+        if(KeyNode.find(key) != KeyNode.end())
+        {
+            node= KeyNode[key];
+            f = node->frequency;
+            temp_dll = FreqDLL[node->frequency];
+            c = temp_dll->Delete(node);
+            
+            if(f == freq && (!temp_dll || temp_dll->isEmpty()))
+                freq = freq+1;
+            node = new Node(key,value, f+1);
+            if(FreqDLL.find(f+1) == FreqDLL.end())
+            {   
+                temp_dll = new DLL();
+                FreqDLL[f+1] = temp_dll;
+            }
+            else
+                temp_dll = FreqDLL[f+1];
+            temp_dll->InsertAtEnd(node);
+            KeyNode.erase(key);
+            KeyNode[key]= node;
+            
+        }
+        
+        else
+        {
+            
+            if(capacity>0)
+            {
+                if(count == capacity)
+                {
+                    temp_dll = FreqDLL[freq];
+                    c = temp_dll->DeleteAtBegining();
+                    KeyNode.erase(c.first);
+                }
+
+
+                else
+                    count++;
+                
+                if(FreqDLL.find(1) == FreqDLL.end())
+                    FreqDLL[1] = dll;
+                
+                node = new Node(key,value, 1);
+                dll->InsertAtEnd(node);
+                KeyNode[key]= node;
+                freq=1;
+
+            }
+        }
+    }
+
+};
+
