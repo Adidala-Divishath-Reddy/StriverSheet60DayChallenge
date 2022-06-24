@@ -1,0 +1,26 @@
+bool stall(vector<int> positions , int distance ,  int cows){
+    int c =1, placed = 0;
+    for(int i=1; i<positions.size(); i++){
+        if(positions[i]-positions[placed] >= distance){
+            placed = i;
+            c++;
+        }
+    }
+    if(c >= cows) return true;
+    return false;
+}
+int chessTournament(vector<int> positions , int n ,  int c){
+	// Write your code here
+    sort(positions.begin(), positions.end());
+    int low = 0, high = positions[positions.size()-1],ans=0;
+    while(low<= high){
+        int mid = low + (high-low)/2;
+        if(stall(positions, mid, c)){
+            ans = mid;
+            low = mid+1;
+        }
+        else
+            high = mid-1;
+    }
+    return ans;
+}
