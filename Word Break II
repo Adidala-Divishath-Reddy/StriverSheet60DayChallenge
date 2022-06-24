@@ -1,0 +1,26 @@
+#include<unordered_set>
+void solve(int index, string &s, unordered_set<string> &dictionary, string temp, vector<string> &ans){
+    if(index == s.length()){
+        ans.push_back(temp);
+        return;
+    }
+    string substr="";
+    for(int i=index; i<s.length(); i++){
+        substr += s[i];
+//         If we find match in the dictionary, then put that part in temp and co recursion call or even we might get other answer too if we append substr with next chars. So don't exit the loop. In this way we are searching for multiple answers.
+        if(dictionary.find(substr) != dictionary.end())
+            solve(i+1,s, dictionary, temp+substr+" ", ans);
+        
+    }
+}
+vector<string> wordBreak(string &s, vector<string> &dictionary)
+{
+    // Write your code here
+    vector<string> ans;
+//     To efficient and fast O(1) search we are using putting dictionary into set
+    unordered_set<string> SET;
+    for(auto i: dictionary)
+        SET.insert(i);
+    solve(0,s, SET, "", ans);
+    return ans;
+}
