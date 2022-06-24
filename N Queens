@@ -1,0 +1,48 @@
+bool isSafe(vector<vector<int>> &temp, int col, int row){
+    int tempR = row;
+    int tempC = col;
+    
+//     Check whether there is any Queen straightly in previous columns;
+    tempC--;
+    while(tempC >=0)
+        if(temp[tempR][tempC--] == 1)
+            return false;
+    
+//     Now check diagonally top
+    tempR = row-1, tempC = col-1;
+    while(tempR >=0 && tempC >=0)
+        if(temp[tempR--][tempC--] == 1)
+            return false;
+    
+//     Now check diagonally down
+    tempR = row+1, tempC = col-1;
+    while(tempR <temp.size() && tempC >=0)
+        if(temp[tempR++][tempC--] == 1)
+            return false;
+    
+    return true;
+}
+void solve(int column, vector<vector<int>> &ans, vector<vector<int>> &temp, 
+           int &n){
+    if(column == n){
+        vector<int> vec;
+        for(auto i: temp)
+            for(auto j:i)
+                vec.push_back(j);
+        ans.push_back(vec);
+        return;
+    }
+    for(int i = 0; i<n;i++){
+        if(isSafe(temp, column, i)){
+            temp[i][column] = 1;
+            solve(column+1, ans, temp, n);
+            temp[i][column] = 0;
+        }
+    }
+}
+vector<vector<int>> solveNQueens(int n) {
+    // Write your code here.
+    vector<vector<int>> ans, temp(n, vector<int>(n,0));
+    solve(0, ans, temp, n);
+    return ans;
+}
