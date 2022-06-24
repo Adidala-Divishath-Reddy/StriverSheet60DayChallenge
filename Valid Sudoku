@@ -1,0 +1,28 @@
+bool tryWith(int row, int col, int matrix[][9], int value){
+    for(int i=0; i<9; i++){
+        if(matrix[row][i] == value)
+            return false;
+        if(matrix[i][col] == value)
+            return false;
+        if(matrix[3*(row/3)+i/3][3*(col/3)+i%3] == value)
+            return false;
+        
+    }
+    return true;
+}
+bool isItSudoku(int matrix[9][9]) {
+    // Write your code here.
+    for(int i=0; i<9 ;i++)
+        for(int j=0; j<9; j++)
+            if(!matrix[i][j]){
+                for(int k=1; k<=9; k++)
+                    if(tryWith(i, j, matrix, k)){
+                        matrix[i][j] = k;
+                        if(isItSudoku(matrix))
+                            return true;
+                            matrix[i][j] = 0;
+                    }
+                return false;
+            }
+    return true;
+}
