@@ -1,0 +1,194 @@
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+class Node
+{
+    public:
+                int key, value;
+                Node* next, *prev;
+                Node(int key, int value)
+                {
+                    this->key = key;
+                    this->value= value;
+                    next= NULL;
+                    prev = NULL;
+                }
+};
+
+struct couple
+{
+    public: int first;
+            int second;
+};
+
+
+class DLL
+{
+    public:     Node* head= NULL, *tail= NULL, *temp=NULL;
+                couple c;
+        
+                void InsertAtBegining(Node* node)
+                {
+                    node->next = head;
+                    if(head)
+                        head->prev = node;
+                    head= node;
+                    
+                    if(!tail)
+                       tail= node;
+            
+                    
+                }
+                
+    
+                void InsertAtEnd(Node* node)
+                {
+                    if(!head)
+                        head =tail= node;
+                    else{
+                        tail->next = node;
+                        node->prev= tail;
+                        tail = node;
+                        }
+                }
+    
+                couple Delete(Node* node)
+                {
+                    if(node->prev == NULL)
+                       return DeleteAtBegining();
+                    
+                    else if(node->next == NULL)
+                       return DeleteAtEnd();
+                    else{
+                        c.first = node->key;
+                        c.second= node->value;
+                        
+                        node->prev->next = node->next;
+                        node->next->prev = node->prev;
+                        node->prev = NULL;
+                        node->next = NULL;
+                        return c;
+                    }
+                }
+                
+                couple DeleteAtBegining()
+                {
+                    temp = head;
+                    if(head)
+                    {
+                        c.first = head->key;
+                        c.second= head->value;
+                        head = head->next;
+                        
+                        temp->next = NULL;
+                        if(head)
+                            head->prev = NULL;
+                        else
+                            tail= NULL;
+                        return c;
+                    }
+                    
+                    return {-5,-5};
+                    
+                    
+                }
+    
+                couple DeleteAtEnd()
+                {
+                        if(tail)
+                        {
+                            c.first = tail->key;
+                            c.second= tail->value;
+                            temp = tail;
+                            tail = tail->prev;
+                            temp->prev = NULL;
+                            if(tail)
+                                tail->next = NULL;
+                            else
+                                head = NULL;
+                            
+                            return c;
+                            
+                        }
+                         return {-5,-5};
+                }
+};
+class LRUCache {
+public:
+    int capacity , data, count=0;
+    unordered_map<int, Node*> um;
+    Node* node;
+    couple c;
+    DLL *dll= new DLL();
+    LRUCache(int capacity) {
+        this->capacity = capacity;
+       
+    }
+    
+    int get(int key) {
+        
+        if(um.find(key) != um.end())
+        {
+            node= um[key];
+            if(node->next)
+            {
+            c = dll->Delete(node);
+            
+            node = new Node(c.first, c.second);
+            
+            dll->InsertAtEnd(node);
+            um.erase(key);
+            um[key] = node;
+            }
+            return node->value;
+        }
+        
+        else
+            return -1;
+    }
+    
+    void put(int key, int value) {
+        
+        if(um.find(key) != um.end()) // if key is already present
+        {
+            node= um[key];
+            
+            dll->Delete(node);
+            
+            node = new Node(key,value);
+            
+            dll->InsertAtEnd(node);
+            um.erase(key);
+            um[key]= node;
+            
+        }
+        
+        else
+        {
+            
+            if(capacity>0)
+            {
+            if(count == capacity)
+            {
+            node = new Node(key,value);
+            c = dll->DeleteAtBegining();
+            dll->InsertAtEnd(node);
+            um.erase(c.first);
+            um[key]= node;
+            }
+            
+            
+            else{
+                
+                node = new Node(key,value);
+                dll->InsertAtEnd(node);
+                
+                
+                um[key]= node;
+                count++;
+
+            }
+            }
+        }
+    }
+};
