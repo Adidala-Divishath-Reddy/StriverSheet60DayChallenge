@@ -1,0 +1,34 @@
+#include<set>
+#include<algorithm>
+#include<iostream>
+long long int fact(int n){
+    if(n==0 || n==1)
+        return 1;
+    return n * fact(n-1);
+}
+string kthPermutation(int n, int k) {
+    // Write your code here.
+    string ans;
+    set<int> S;
+    for(int i=1;i<=n;i++)
+        S.insert(i);
+    char c;
+    long long int len, blockNo, SeqNo,permutations;
+    k--;
+    
+    while(!S.empty()){ 
+        
+        permutations = fact(S.size()-1);
+        blockNo = k/permutations;
+        SeqNo = k%permutations;
+        auto it = S.begin();
+        for(int i =0; i<blockNo; i++)
+            it++;
+        
+        ans+=*it+'0';
+        S.erase(*it);
+        k = k % permutations;
+        
+    }
+    return ans;
+}
