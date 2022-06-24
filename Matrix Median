@@ -1,0 +1,50 @@
+#include<algorithm>
+#include<queue>
+
+int getMedian(vector<vector<int>> &matrix)
+{
+    // Write your code here.
+    vector<int> temp;
+    for(auto i: matrix)
+        for(auto j:i)
+            temp.push_back(j);
+    sort(temp.begin(), temp.end());
+    if(temp.size()%2)
+        return temp[temp.size()/2];
+    return (temp[temp.size()/2-1]+temp[temp.size()/2])/2;
+    (OR)
+    priority_queue<int> maxH;
+    priority_queue<int, vector<int>, greater<int>> minH;
+    
+    for(auto i: matrix)
+        for(auto j:i){
+            if(maxH.empty() || maxH.top() > j){
+                
+                maxH.push(j);
+            }
+            else{
+                minH.push(j);
+            }
+            if(maxH.size() > minH.size() && maxH.size()-minH.size()>1 || maxH.size() < minH.size() && minH.size()-maxH.size()>1){
+                if(maxH.size() > minH.size())
+                {
+                    minH.push(maxH.top());
+                    maxH.pop();
+                }
+                else{
+                    maxH.push(minH.top());
+                    minH.pop();
+                }
+                
+            }
+        }
+    if(maxH.size() == minH.size())
+        return (maxH.top()+minH.top())/2;
+    else if(maxH.size() > minH.size())
+        return maxH.top();
+    else
+        return minH.top();
+}
+
+
+
