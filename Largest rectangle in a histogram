@@ -1,0 +1,65 @@
+#include<stack>
+#include<limits.h>
+int largestRectangle(vector < int > & heights) {
+   // Write your code here.
+     int maxi = INT_MIN;
+     stack<pair<int,int>> s;//first will height and second will be index
+    for(int i=0; i<heights.size(); i++){
+        while(!s.empty() && s.top().first >= heights[i]){
+            if(s.top().first == heights[i])
+            {
+                s.pop();
+                break;;
+            }
+            int pointedElement = s.top().first;
+            int nextSmall = i;
+            
+            s.pop();
+            
+            int prevSmall = -1;
+            if(!s.empty())
+                prevSmall = s.top().second;
+            int AreaByPointedElement = pointedElement *(nextSmall - prevSmall-1);
+            maxi = maxi < AreaByPointedElement? AreaByPointedElement: maxi;
+        }
+        s.push({heights[i],i});
+    }
+    int nextSmall = heights.size();
+    if(!s.empty())
+        while(!s.empty()){
+            int pointedElement = s.top().first;
+            s.pop();
+            int prevSmall = -1;
+            if(!s.empty())
+               prevSmall = s.top().second;
+            int AreaByPointedElement = pointedElement *(nextSmall - prevSmall-1);
+            maxi = maxi < AreaByPointedElement? AreaByPointedElement: maxi;
+        }
+    
+    return maxi;
+ }
+ 
+ (OR)
+ 
+ #include<stack>
+#include<limits.h>
+int largestRectangle(vector < int > & heights) {
+   // Write your code here.
+     int maxi = 0, width;
+     stack<int> s;//first will height and second will be index
+    for(int i=0; i<=heights.size(); i++){
+        while(!s.empty() && (i== heights.size() || heights[s.top()] >= heights[i]))        
+        {
+            int height = heights[s.top()];
+            s.pop();
+            if(s.empty()) width = i;
+            else
+                width = i - s.top()-1;
+            maxi = max(maxi , width * height);
+            
+        }
+        s.push(i);
+    }
+    
+    return maxi;
+ }
