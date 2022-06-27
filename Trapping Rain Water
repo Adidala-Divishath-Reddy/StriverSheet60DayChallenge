@@ -1,0 +1,34 @@
+#include <bits/stdc++.h> 
+void findInLeft(long *arr, vector<long> &MaxInLeft){
+    long maxi = arr[0];
+    for(int i=1; i<MaxInLeft.size(); i++){
+        if(arr[i] < maxi)
+            MaxInLeft[i] = maxi;
+        maxi = maxi < arr[i] ? arr[i] : maxi;
+    }
+}
+
+void findInRight(long *arr, vector<long> &MaxInRIght){
+    long maxi = arr[MaxInRIght.size()-1];
+    for(int i=MaxInRIght.size()-2; i>=0; i--){
+        if(arr[i] < maxi)
+            MaxInRIght[i] = maxi;
+        maxi = maxi < arr[i] ? arr[i] : maxi;
+    }
+}
+
+long getTrappedWater(long *arr, int n){
+    // Write your code here.
+    long ans = 0;
+    if(n==0 || n==1 || n==2)
+        return ans;
+    vector<long> MaxInLeft(n,0), MaxInRIght(n,0);
+    findInLeft(arr, MaxInLeft);
+    findInRight(arr, MaxInRIght);
+    for(int i=1; i<n-1; i++){
+        if(min(MaxInLeft[i], MaxInRIght[i]))
+            ans += min(MaxInLeft[i], MaxInRIght[i]) - arr[i];
+    }
+    return ans;
+    
+}
