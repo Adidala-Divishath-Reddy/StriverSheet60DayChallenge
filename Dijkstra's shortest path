@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source) {
+    // Write your code here.
+//    We are having an array to check whether a node is already relaxed or not and another map is used to know the distance from source to each vertex.
+    vector<int> nodeRelaxed(vertices,0);
+    unordered_map<int,int> DistFromSource(vertices);
+    
+    for(int i=0; i<vertices; i++)
+        DistFromSource[i] = INT_MAX;
+    
+//     Distance from source to source will be zero.
+    DistFromSource[source] = 0;
+    int temp;
+    int currVertex;
+    
+//     Map used to built adjacency list
+    unordered_map<int, list<pair<int,int>>> um;
+    
+    for(auto i: vec){
+        um[i[0]].push_back({i[2],i[1]});
+        um[i[1]].push_back({i[2],i[0]});
+    }
+    
+
+//     We need to relax n nodes. So run loop for n times. 
+    while(vertices--){
+
+//         1st element is distance. 2nd element is vertex number.
+        temp = INT_MAX;
+        for(auto i: DistFromSource)
+            if(temp > i.second && !nodeRelaxed[i.first])
+            {
+                temp = i.second;
+                currVertex = i.first;
+            }
+       
+        nodeRelaxed[currVertex] = 1;
+        
+        for(auto i: um[currVertex])
+            if(!nodeRelaxed[i.second] && DistFromSource[i.second] > DistFromSource[currVertex] + i.first)
+            DistFromSource[i.second] = DistFromSource[currVertex]+i.first;
+
+    }
+    vector<int> ans;
+    for(int i=0; i<DistFromSource.size(); i++)
+        ans.push_back(DistFromSource[i]);
+    return ans;
+}
