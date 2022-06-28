@@ -1,0 +1,51 @@
+#include<unordered_map>
+#include<unordered_set>
+#include<queue>
+#include<algorithm>
+
+bool comp(pair<int, pair<int,int>> &a, pair<int, pair<int,int>> &b){
+    return a.first < b.first;
+}
+int par(int u, vector<int> &parent){
+    if(u == parent[u]) return u;
+    return par(parent[u], parent);
+}
+void UnionTree(int u, int v, vector<int> &parent, vector<int> &rank){
+    u = par(u, parent);
+    v = par(v, parent);
+    if(rank[v] < rank[u])
+        parent[v] = u;
+    else if(rank[u] < rank[v])
+        parent[u] = v;
+    else{
+        parent[v] = u;
+        rank[u]++;
+    }
+}
+int kruskalMST(int n, int m, vector<vector<int>> &graph) {
+	// Write your code here.
+    vector<pair<int, pair<int,int>>> Edges;
+    for(auto i: graph)
+        Edges.push_back({i[2], {i[0], i[1]}});
+    sort(Edges.begin(), Edges.end(), comp);
+    vector<int> parent(n+1), rank(n+1, 0);
+    
+    for(int i=1; i<=n; i++)
+        parent[i] = i;
+    
+    
+    int Answer=0;
+    int numberOfEdgesAddedToMST = 0;
+    
+    for(auto i: Edges){
+        int u = i.second.first;
+        int v = i.second.second;
+        int weight = i.first;
+        if(par(u, parent) != par(v, parent)){
+            Answer+= weight;
+            UnionTree(u, v, parent, rank);
+        }
+    }
+    
+    return Answer;
+}
