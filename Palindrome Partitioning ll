@@ -1,0 +1,36 @@
+#include<limits.h>
+#include<vector>
+bool isPalindrome(string s){
+    int low = 0, high = s.length()-1;
+    while(low < high){
+        if(s[low++] != s[high--])
+            return false;
+    }
+    return true;
+}
+int find(int index, vector<int> &dp, string &str){
+//     If we reach the end of the string then we need to reduce the partitions by 1, y bcoz even before str.length() we have kept a partition. So it will be waste. 
+    if(index == str.length())
+        return -1;
+    if(dp[index] == -1){
+        
+        int mini = INT_MAX;
+        for(int i=index; i<str.length(); i++)
+//             If the substring is a palindrome, then we will put one partition and check the min no. of partitions from next index. In this way we will check all substrings starting from the 'index' and return the min no of partitions possible at the end of the function.
+            if(isPalindrome(str.substr(index,i-index+1)))
+                mini = min(mini, 1 + find(i+1, dp, str));
+            
+        dp[index] = mini;
+    }
+    
+    return dp[index];
+    
+}
+int palindromePartitioning(string str) {
+    // Write your code here
+//     This array will store the minimum number of partitions in a subarray starting from index i
+    vector<int> dp(str.length(),-1);
+    
+    find(0, dp, str);
+    return dp[0];
+}
