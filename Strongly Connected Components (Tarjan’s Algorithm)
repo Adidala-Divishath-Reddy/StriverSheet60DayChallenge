@@ -1,0 +1,57 @@
+#include<unordered_map>
+#include<list>
+#include<stack>
+#include<climits>
+int TiMe;
+int dfs(vector<int> &visited, int u, 
+         unordered_map<int, list<int>> &um, vector<int> &disc, 
+         vector<int> &low, vector<int> &presentInStack, stack<int> &s, vector<vector<int>> &ans){
+        presentInStack[u] = 1;
+        int mini = TiMe;
+        visited[u] = 1;
+        disc[u] = low[u] = TiMe;
+        s.push(u);
+        for(auto v: um[u]){
+            if(!visited[v]){
+                TiMe++;
+                dfs(visited,v,um, disc, low,presentInStack, s, ans);
+                low[u] = min(low[u], low[v]);
+            }
+            else
+                if(presentInStack[v])
+                    low[u] = min(low[u], disc[v]);
+        }
+
+        if(disc[u] == low[u]){
+            vector<int> temp;
+            int top;
+            do{
+                top = s.top();
+                temp.push_back(top);
+                presentInStack[top] = 0;
+                s.pop();
+            }while(top!=u);
+            
+            ans.push_back(temp);
+        }
+}
+vector<vector<int>> stronglyConnectedComponents(int V, vector<vector<int>> &edges)
+{
+    // Write your code here.
+    vector<vector<int>> ans;
+    vector<int> visited(V,0), temp, disc(V,0), low(V,INT_MAX), presentInStack(V,0);
+    stack<int> s;
+    unordered_map<int, list<int>> um;
+    
+    for(auto i: edges)
+        um[i[0]].push_back(i[1]);
+        
+    TiMe = 1;
+    low[0] = TiMe;
+    disc[0] = TiMe;
+    for(int i=0; i<V;i++)
+        if(!visited[i])
+            dfs(visited,i,um, disc, low,presentInStack,s, ans);
+    
+    return ans;
+}
