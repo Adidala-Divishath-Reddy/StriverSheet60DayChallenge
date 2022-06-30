@@ -1,0 +1,38 @@
+#include<limits.h>
+#include<vector>
+// Similar to egg dropping problem. But use binary search instead of regular linear searching.
+int eggDropping(int eggs, int floors, vector<vector<int>> &dp)
+{
+    if(dp[eggs][floors] != -1)
+        return dp[eggs][floors];
+    if(floors ==1 || floors==0){
+        dp[eggs][floors] = floors;
+        return floors;
+    }
+    if(eggs == 1){
+        dp[eggs][floors] = floors;
+        return floors;
+    }
+    int mini = INT_MAX;
+    
+    int low = 1, high = floors;
+    while(low<=high){
+        int mid = low + (high-low)/2;
+        int goAbove = eggDropping(eggs,floors-mid, dp);
+        int goBelow = eggDropping(eggs-1,mid-1, dp);
+        
+        if(goAbove > goBelow)
+            low = mid+1;
+        else
+            high = mid-1;
+         mini = min(mini, max(goAbove, goBelow)+1);
+    }
+    dp[eggs][floors] = mini;
+    return mini;
+}
+int cutLogs(int k, int n)
+{
+    // Write your code here.
+    vector<vector<int>> dp(k+1, vector<int>(n+1,-1));
+    return eggDropping(k,n, dp);
+}
